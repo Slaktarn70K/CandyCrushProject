@@ -64,7 +64,7 @@ section {
 }
 
 .flexitem:hover {
-    background:#ccc;
+    background:rgb(146, 23, 23);
     cursor:pointer;
 }
 .player1 {
