@@ -93,6 +93,11 @@ section {
     background-size: 40px;
     background-size: cover;
 }
+.player5 {
+    background-image: url("img/OrangeCandy.png");
+    background-size: 40px;
+    background-size: cover;
+}
 
 .available {
     outline:2px solid #fff;
