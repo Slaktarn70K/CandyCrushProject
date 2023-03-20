@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 function initBoard() {
     for(let i=0;i<64;i++) {
-        board[i] = Math.floor(Math.random() * 6);
+        board[i] = Math.floor(Math.random() * 7);
     }
     
     updateBoard();
@@ -17,10 +17,10 @@ function initBoard() {
 function updateBoard() {
     html = '';
     for(let i=0;i<64;i++) {
-        /*if (board[i] == 0) { //Empty
+        if (board[i] == 0) { //Empty
             html += '<div data-index=' + i + ' class="flexitem"></div>';
-        }*/
-        if (board[i] == 1) { //Player 1
+        }
+        else if (board[i] == 1) { //Player 1
             html += '<div data-index=' + i + ' class="flexitem player1"></div>';
         }
         else if (board[i] == 2) { //Player 2
@@ -35,7 +35,7 @@ function updateBoard() {
         else if (board[i] == 5) { //Player 5
             html += '<div data-index=' + i + ' class="flexitem player5"></div>';
         }
-        else if (board[i] == 6) { //Player 5
+        else if (board[i] == 6) { //Player 6
             html += '<div data-index=' + i + ' class="flexitem player6"></div>';
         }
         else if (board[i] == 30) { //Available
@@ -43,45 +43,4 @@ function updateBoard() {
         }
     }
     document.getElementById('flexcontainer').innerHTML = html;
-
-}
-
-window.addEventListener('click', (event) => {
-
-    if (event.target.matches('#restart')) {
-        initBoard();
-    }
-
-    if (event.target.matches('.flexitem')) {
-        var dataindex = event.target.getAttribute('data-index');        
-   
-        //Is clicked element empty (or available is set)?
-        if (board[dataindex] == 0 || board[dataindex] == 30) {
-            board[dataindex] = current_player;
-
-            if (current_player == 1) {
-                current_player = 2;
-            }
-            else {
-                current_player = 1;
-            }
-
-            dataindex = parseInt(dataindex);
-
-            //Check nearby empty
-            nearby_indexes = [-1,1,-8,8,-7,7,-9,9];
-
-            for(let i=0;i<nearby_indexes.length;i++) {
-                let ni = nearby_indexes[i];
-
-                if (board[dataindex+ni] == 0) {
-                    board[dataindex+ni] = 30;
-                }
-            }
-
-
-            updateBoard();
-        }
-
-    }
-});
+};
