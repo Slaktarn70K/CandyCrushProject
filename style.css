@@ -1,3 +1,7 @@
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
 .box {
   width: 600px;
   height: 400px;
@@ -12,10 +16,16 @@
 }
 .box .stBtn {
   width: 100px;
-  height: 50px;
+  padding: 30px;
   margin-top: 10px;
   background-color: antiquewhite;
   text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111;
+}
+.box .stBtn:hover {
+  background-color: rgb(221, 209, 193);
 }
 
 #game-board {
