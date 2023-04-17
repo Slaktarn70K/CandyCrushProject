@@ -1,126 +1,122 @@
 * {
-  font-family: 'Roboto', sans-serif;
+    padding: 0;
+    margin: 0;
+    font-family: 'Handlee', cursive;
 }
-
 .box {
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-image: url("header_elements/startbackgrund.jpg");
-  background-size: cover;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 100vh;
+    background-image: url(image/background.jpg);
+    background-size: cover;
 }
-.box .stBtn {
-  width: 100px;
-  padding: 30px;
-  margin-top: 15px;
-  text-align: center;
-  cursor: pointer;
-  background-color: #145213;
-  text-decoration: none;
-  color: #fff;
-  box-shadow: 
-  inset -5px -5px 0px 2.5px #0C3C09, 
-  inset 5px 5px 0px 2.5px #1D691F,
-  0px 0px 0px 5px #111;
-  border-radius: 5px;
-  font-size: 30px;
-  transition: 0.3s;
-}
-.box .stBtn:hover {
-  background-color: #10440f;
-  box-shadow: 
-  inset -5px -5px 0px 2.5px #0a2f07, 
-  inset 5px 5px 0px 2.5px #164d17,
-  0px 0px 0px 5px #111;
+.grid {
+    height: 520px;
+    width: 520px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #785e7b;
+    box-shadow: 0px 0px 0px 0.1px rgb(0, 0, 0);
+    margin-top: 25px;
 }
 
-#game-board {
-  display: grid;
-  grid-template-columns: repeat(8, 50px);
-  grid-template-rows: repeat(8, 50px);
-  gap: 5px;
-  margin: 50px auto;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
+.grid div {
+    height: 65px;
+    width: 65px;
+    background-size: cover;
+    box-shadow: inset 0px 0px 0px 0.1px rgb(0, 0, 0);
 }
-
-.cell {
-  background-color: #ccc;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 30px;
+.score-board {
+    background-image: url(image/ScoreBoard.svg);
+    background-size: cover;
+    width: 325px;
+    height: 100vh;
 }
-
 #score {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
+    position: relative;
+    left: 50%;
+    top: 32%;
+    transform: translate(-7%, -75%);
+    font-size: 40px;
+}
+#countdown {
+    position: relative;
+    left: 135px;
+    top: 50px;
 }
 
-#timer {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
+#death-screen {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100vh;
+    background-color: #2c2c2c;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    z-index: -999;
 }
+#death-screen a {
+    color: #fff;
+    text-decoration: none;
+}
+#death-screen h2 {
+    font-size: 100px;
+}
+#death-screen .btn {
+    font-size: 20px;
+    padding: 10px 20px;
+    width: 100px;
+    background-color: #3f3f3f;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+#death-screen .btn:hover {
+    cursor: pointer;
+    background-color: #4d4d4d;
+}
+/* start menu */
 
-.selected {
-  border: 3px solid #ff0;
-  box-sizing: border-box;
+.start-box {
+    width: 100%;
+    height: 100vh;
+    background-color: #785e7b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url("image/background.jpg");
+    background-size: cover;
 }
-.cell.swapping {
-  transition: background-color 0.2s ease-in-out;
+.start-box h1 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 75px;
+    text-shadow: -1px -1px 0 #2c2c2c, 1px -1px 0 #2c2c2c, -1px 1px 0 #2c2c2c, 1px 1px 0 #2c2c2c;
 }
-.mapbox {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-image: url(header_elements/background.jpg);
-  background-size: cover;
+.start-box a{
+    text-decoration: none;
 }
-.mapbox a {
-  padding: 25px 30px;
-  margin: 10px;
-  background-color: #145213;
-  text-decoration: none;
-  color: #fff;
-  box-shadow: 
-  inset -5px -5px 0px 2.5px #0C3C09, 
-  inset 5px 5px 0px 2.5px #1D691F,
-  0px 0px 0px 5px #111;
-  border-radius: 5px;
-  font-size: 30px;
-  transition: 0.3s;
+.start-box .btn {
+    padding: 25px 40px;
+    width: 150px;
+    background-color: #fff;
+    text-align: center;
+    margin: 10px;
+    font-size: 23px;
+    transition: 0.2s;
+    text-decoration: none;
+    color: #2c2c2c;
 }
-.mapbox a:hover {
-  padding: 30px 35px;
-  background-color: #10440f;
-  box-shadow: 
-  inset -5px -5px 0px 2.5px #0a2f07, 
-  inset 5px 5px 0px 2.5px #164d17,
-  0px 0px 0px 5px #111;
+.start-box .btn:hover {
+    background-color: #2c2c2c;
+    color: #fff;
+    cursor: pointer;
 }

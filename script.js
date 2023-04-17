@@ -1,174 +1,244 @@
-const gameBoard = document.getElementById('game-board');
-const scoreValue = document.getElementById('score-value');
-const timeValue = document.getElementById('time-value');
+document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.querySelector(".grid")
+    const scoreDisplay = document.getElementById("score")
+    const scoreOutput = document.getElementById("scoreEnd")
+    const width = 8
+    const squares = []
+    let score = 0
 
-const rows = 8;
-const columns = 8;
-const colors = ['red', 'blue', 'green', 'yellow', 'orange'];
+    const candyColors = [
+        "url(image/F1.png)", 
+        "url(image/F2.png)", 
+        "url(image/F3.png)", 
+        "url(image/F4.png)", 
+        "url(image/F5.png)", 
+        "url(image/F6.png)"
+    ]
 
-let score = 0;
-let time = 60;
-
-function initGame() {
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < columns; col++) {
-      const cell = document.createElement('div');
-      cell.classList.add('cell');
-      cell.dataset.row = row;
-      cell.dataset.col = col;
-      cell.dataset.color = colors[Math.floor(Math.random() * colors.length)];
-      cell.style.backgroundColor = cell.dataset.color;
-      gameBoard.appendChild(cell);
-    }
-  }
-}
-
-function updateScore(amount) {
-  score += amount;
-  scoreValue.textContent = score;
-}
-
-function updateTime() {
-  time--;
-  timeValue.textContent = time;
-
-  if (time === 0) {
-    // Game over
-  }
-}
-
-function checkForMatches() {
-  const cells = document.querySelectorAll('.cell');
-  const cellsToRemove = [];
-  let scoreIncrement = 0;
-
-  // kolla horizontell led
-  for (let row = 0; row < rows; row++) {
-    let matchingColor = null;
-    let matchLength = 0;
-
-    for (let col = 0; col < columns; col++) {
-      const cell = cells[row * columns + col];
-
-      if (cell.dataset.color === matchingColor) {
-        matchLength++;
-      } else {
-        if (matchLength >= 3) {
-          for (let i = 0; i < matchLength; i++) {
-            cellsToRemove.push(cells[row * columns + col - i - 1]);
-          }
-          scoreIncrement += matchLength;
+    function createBoard() {
+        for (let i = 0; i < width*width; i++) {
+            const square = document.createElement("div")
+            square.setAttribute("draggable", true)
+            square.setAttribute("id", i)
+            let randomColor = Math.floor(Math.random() * candyColors.length)
+            square.style.backgroundImage = candyColors[randomColor]
+            grid.appendChild(square)
+            squares.push(square)
+            console.log()
         }
+    }
+    createBoard();
 
-        matchingColor = cell.dataset.color;
-        matchLength = 1;
-      }
+    let colorBeingDragged
+    let colorBeingReplaced
+    let squareIdBeingDragged
+    let squareIdBeingReplaced
+
+    squares.forEach(square => square.addEventListener("dragstart", dragStart))
+    squares.forEach(square => square.addEventListener("dragend", dragEnd))
+    squares.forEach(square => square.addEventListener("dragover", dragOver))
+    squares.forEach(square => square.addEventListener("dragenter", dragEnter))
+    squares.forEach(square => square.addEventListener("dragleave", dragLeave))
+    squares.forEach(square => square.addEventListener("drop", dragDrop))
+
+    function dragStart() {
+        colorBeingDragged = this.style.backgroundImage
+        squareIdBeingDragged = parseInt(this.id)
+        console.log(colorBeingDragged)
+        console.log(this.id, "dragstart")
+    }
+    function dragEnd() {
+        console.log(this.id, "dragend")
+        let validMoves = [
+            squareIdBeingDragged -1,
+            squareIdBeingDragged -width,
+            squareIdBeingDragged + 1,
+            squareIdBeingDragged +width
+        ]
+        let validMove = validMoves.includes(squareIdBeingReplaced)
+
+        if (squareIdBeingReplaced && validMove) {
+            squareIdBeingReplaced = null
+        } else if (squareIdBeingReplaced && !validMove) {
+            squares[squareIdBeingReplaced].style.backgroundImage = colorBeingReplaced
+            squares[squareIdBeingDragged].style.backgroundImage = colorBeingDragged
+        } else squares [squareIdBeingDragged].style.backgroundImage = colorBeingDragged
+    }
+    function dragOver(e) {
+        e.preventDefault()
+        console.log(this.id, "dragover")
+    }
+    function dragEnter(e) {
+        e.preventDefault()
+        console.log(this.id, "dragenter")
+    }
+    function dragLeave() {
+        console.log(this.id, "dragleave")
+    }
+    function dragDrop() {
+        console.log(this.id, "dragdrop")
+        colorBeingReplaced = this.style.backgroundImage
+        squareIdBeingReplaced = parseInt(this.id)
+        this.style.backgroundImage = colorBeingDragged
+        squares[squareIdBeingDragged].style.backgroundImage = colorBeingReplaced
     }
 
-    if (matchLength >= 3) {
-      for (let i = 0; i < matchLength; i++) {
-        cellsToRemove.push(cells[row * columns + columns - i - 1]);
-      }
-      scoreIncrement += matchLength;
-    }
-  }
-
-  // kolla vertikal led
-  for (let col = 0; col < columns; col++) {
-    let matchingColor = null;
-    let matchLength = 0;
-
-    for (let row = 0; row < rows; row++) {
-      const cell = cells[row * columns + col];
-
-      if (cell.dataset.color === matchingColor) {
-        matchLength++;
-      } else {
-        if (matchLength >= 3) {
-          for (let i = 0; i < matchLength; i++) {
-            cellsToRemove.push(cells[(row - i - 1) * columns + col]);
-          }
-          scoreIncrement += matchLength;
+    //drop candies down
+    function moveDown() {
+        for (i = 0; i < 55; i++) {
+            if (squares[i + width].style.backgroundImage === "") {
+                squares[i + width].style.backgroundImage = squares[i].style.backgroundImage
+                squares[i].style.backgroundImage = ""
+                const firstRow = [0, 1, 2, 3, 4, 5, 6, 7]
+                const isFirstRow = firstRow.includes(i)
+                if (isFirstRow && squares[i].style.backgroundImage === "") {
+                    let randomColor = Math.floor(Math.random() * candyColors.length)
+                    squares[i].style.backgroundImage = candyColors[randomColor]
+                }
+            }
         }
-
-        matchingColor = cell.dataset.color;
-        matchLength = 1;
-      }
     }
 
-    if (matchLength >= 3) {
-      for (let i = 0; i < matchLength; i++) {
-        cellsToRemove.push(cells[(rows - i - 1) * columns + col]);
-      }
-      scoreIncrement += matchLength;
+    //check for five
+    function checkRowForFive() {
+        for (i = 0; i < 59; i++) {
+            let rowOfFive = [i, i+1, i+2, i+3, i+4]
+            let decidedColor = squares[i].style.backgroundImage
+            const isBlank = squares[i].style.backgroundImage === ""
+
+            const nontvalid = [4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 23, 28, 29, 30, 31, 36, 37, 38, 39, 44, 45, 46, 47, 52, 53, 54, 55]
+            if (nontvalid.includes(i)) continue
+
+            if (rowOfFive.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
+                score += 15
+                scoreDisplay.innerHTML = score
+                scoreOutput.innerHTML = score
+                rowOfFive.forEach(index => {
+                    squares[index].style.backgroundImage = "url(image/special.png)"
+                })
+            }
+        }
     }
-  }
+    checkRowForFive();
 
-  // ta bort "cells"
-  if (cellsToRemove.length > 0) {
-    cellsToRemove.forEach(cell => {
-      cell.style.backgroundColor = '';
-      cell.dataset.color = '';
-    });
+    function checkColumnForFive() {
+        for (i = 0; i < 47; i++) {
+            let ColumnOfFive = [i, i+width, i+width*2, i+width*3, i+width*4]
+            let decidedColor = squares[i].style.backgroundImage
+            const isBlank = squares[i].style.backgroundImage === ""
 
-    updateScore(scoreIncrement);
-  }
-}
+            if (ColumnOfFive.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
+                score += 15
+                scoreDisplay.innerHTML = score
+                scoreOutput.innerHTML = score
+                ColumnOfFive.forEach(index => {
+                    squares[index].style.backgroundImage = "url(image/special.png)"
+                })
+            }
+        }
+    }
+    checkColumnForFive();
 
-function swapCells(cell1, cell2) {
-  const row1 = parseInt(cell1.dataset.row);
-  const col1 = parseInt(cell1.dataset.col);
-  const color1 = cell1.dataset.color;
+    //check for four
+    function checkRowForFour() {
+        for (i = 0; i < 60; i++) {
+            let rowOfFour = [i, i+1, i+2, i+3]
+            let decidedColor = squares[i].style.backgroundImage
+            const isBlank = squares[i].style.backgroundImage === ""
 
-  const row2 = parseInt(cell2.dataset.row);
-  const col2 = parseInt(cell2.dataset.col);
-  const color2 = cell2.dataset.color;
+            const nontvalid = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55]
+            if (nontvalid.includes(i)) continue
 
-  cell1.style.transition = 'background-color 0.3s ease';
-  cell2.style.transition = 'background-color 0.3s ease';
+            if (rowOfFour.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
+                score += 10
+                scoreDisplay.innerHTML = score
+                scoreOutput.innerHTML = score
+                rowOfFour.forEach(index => {
+                    squares[index].style.backgroundImage = ""
+                })
+            }
+        }
+    }
+    checkRowForFour();
 
-  // Swap "colors"
-  cell1.style.backgroundColor = color2;
-  cell2.style.backgroundColor = color1;
+    function checkColumnForFour() {
+        for (i = 0; i < 47; i++) {
+            let ColumnOfFour = [i, i+width, i+width*2, i+width*3]
+            let decidedColor = squares[i].style.backgroundImage
+            const isBlank = squares[i].style.backgroundImage === ""
 
-  // Updatera dataset
-  cell1.dataset.row = row2;
-  cell1.dataset.col = col2;
-  cell1.dataset.color = color2;
+            if (ColumnOfFour.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
+                score += 10
+                scoreDisplay.innerHTML = score
+                scoreOutput.innerHTML = score
+                ColumnOfFour.forEach(index => {
+                    squares[index].style.backgroundImage = ""
+                })
+            }
+        }
+    }
+    checkColumnForFour();
 
-  cell2.dataset.row = row1;
-  cell2.dataset.col = col1;
-  cell2.dataset.color = color1;
+    // check for three
+    function checkRowForThree() {
+        for (i = 0; i < 61; i++) {
+            let rowOfThree = [i, i+1, i+2]
+            let decidedColor = squares[i].style.backgroundImage
+            const isBlank = squares[i].style.backgroundImage === ""
 
-  // kolla för "match" efter animationen är slut
-  setTimeout(() => {
-    checkForMatches();
-  }, 300);
-}
+            const nontvalid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55]
+            if (nontvalid.includes(i)) continue
 
-function handleCellClick(event) {
-  const clickedCell = event.target;
+            if (rowOfThree.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
+                score += 5
+                scoreDisplay.innerHTML = score
+                scoreOutput.innerHTML = score
+                rowOfThree.forEach(index => {
+                    squares[index].style.backgroundImage = ""
+                })
+            }
+        }
+    }
+    checkRowForThree();
 
-  if (!handleCellClick.firstCellClicked) {
-    clickedCell.classList.add('selected');
-    handleCellClick.firstCellClicked = clickedCell;
-  } else if (clickedCell !== handleCellClick.firstCellClicked) {
-    clickedCell.classList.add('selected');
-    const secondCellClicked = clickedCell;
+    function checkColumnForThree() {
+        for (i = 0; i < 47; i++) {
+            let ColumnOfThree = [i, i+width, i+width*2]
+            let decidedColor = squares[i].style.backgroundImage
+            const isBlank = squares[i].style.backgroundImage === ""
 
-    // byt plats på  "cells"
-    swapCells(handleCellClick.firstCellClicked, secondCellClicked);
+            if (ColumnOfThree.every(index => squares[index].style.backgroundImage === decidedColor && !isBlank)) {
+                score += 5
+                scoreDisplay.innerHTML = score
+                scoreOutput.innerHTML = score
+                ColumnOfThree.forEach(index => {
+                    squares[index].style.backgroundImage = ""
+                })
+            }
+        }
+    }
+    checkColumnForThree();
 
-    // ta bort "select" på "cells"
-    handleCellClick.firstCellClicked.classList.remove('selected');
-    secondCellClicked.classList.remove('selected');
+    window.setInterval(function(){
+        moveDown()
+        checkRowForFive()
+        checkColumnForFive()
+        checkRowForFour()
+        checkColumnForFour()
+        checkRowForThree()
+        checkColumnForThree()
+    }, 50)
+})
 
-    handleCellClick.firstCellClicked = null;
-  }
-}
 
-initGame();
+var countdownTime = 60;
+var countdownElement = document.getElementById('countdown');
 
-setInterval(updateTime, 1000);
-
-gameBoard.addEventListener('click', handleCellClick);
+var countdownInterval = setInterval(function() {
+    countdownElement.innerHTML =  countdownTime + " s";
+    countdownTime--;
+    if (countdownTime === 0) {
+    document.getElementById('death-screen').style.zIndex = '999';
+    clearInterval(countdownInterval);
+    }
+}, 1000);

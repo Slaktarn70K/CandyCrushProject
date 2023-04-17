@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Candy Flush</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Crush</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="box">
-    <a class="stBtn" href="map.html">Play</a>
-    <a class="stBtn">Info</a>
-    <a class="stBtn">Credits</a>
-  </div>
+    <div id="death-screen">
+      <h2>You died!</h2>
+      <p>Better luck next time...</p>
+      <p>Your score: <p id="scoreEnd"></p></p>
+      <div class="btn" type="button" value="Reload Page" onClick="window.location.reload(true)">Play again!</div>
+      <a href="start.html"><div class="btn">Main Menu</div></a>
+    </div>
+    <div class="box">
+        <div class="score-board">
+            <h1 id="countdown"></h1>
+            <h1 id="score"></h1>
+        </div>
+        <div class="grid"></div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
